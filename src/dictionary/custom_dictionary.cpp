@@ -27,13 +27,10 @@
 #include <fstream>
 #include <iostream>
 
-using std::cout;
 
 CustomDictionary::CustomDictionary(const std::string& filename)
     : m_path(filename)
 {
-    cout << "Creating dictionary from file " << filename << "\n";
-
     std::ifstream infile(filename);
     std::string word;
     while(infile >> word)

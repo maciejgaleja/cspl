@@ -4,3 +4,4 @@ project(cspl CXX)
 
 add_subdirectory(lib/hunspell)
 add_subdirectory(src)
+

@@ -21,38 +21,18 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 **/
 
-#include "custom_dictionary.hpp"
+#ifndef SRC__RUN_CONFIG_HPP
+#define SRC__RUN_CONFIG_HPP
 
-#include "../log.hpp"
-#include <fstream>
-#include <iostream>
+#include <string>
 
-using std::cout;
-
-CustomDictionary::CustomDictionary(const std::string& filename)
-    : m_path(filename)
+class RunConfig
 {
-    cout << "Creating dictionary from file " << filename << "\n";
+public:
+    std::string file = "";
+    bool interactive = false;
 
-    std::ifstream infile(filename);
-    std::string word;
-    while(infile >> word)
-    {
-        m_words.push_back(word);
-    }
-}
+    bool validate();
+};
 
-CustomDictionary::~CustomDictionary()
-{
-    std::ofstream out(m_path);
-    for(const auto& word : m_words)
-    {
-        out << word << "\n";
-    }
-    out.close();
-}
-
-void CustomDictionary::add(const Word& word)
-{
-    m_words.push_back(word);
-}
+#endif // SRC__RUN_CONFIG_HPP

@@ -1,3 +1,6 @@
 [submodule "lib/hunspell"]
 	path = lib/hunspell
 	url = git@github.com:maciejgaleja/hunspell.git
+[submodule "lib/clipp"]
+	path = lib/clipp
+	url = https://github.com/muellan/clipp.git

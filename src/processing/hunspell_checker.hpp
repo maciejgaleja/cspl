@@ -34,10 +34,14 @@ class HunspellChecker : public WordSink, public WordSource
 public:
     HunspellChecker(Dictionary& dict) : m_dict(dict){};
     void add(const Word& word);
+    std::vector<Word>& errors()
+    {
+        return m_errors;
+    }
 
 protected:
     Dictionary& m_dict;
-    unsigned m_error_count = 0;
+    std::vector<Word> m_errors;
 };
 
 #endif // SRC__PROCESSING__HUNSPELL_CHECKER_HPP

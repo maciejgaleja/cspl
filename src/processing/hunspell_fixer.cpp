@@ -33,7 +33,7 @@ void HunspellFixer::add(const Word& word)
     bool ok = m_dict.hunspell().spell(word.c_str());
     if(!ok)
     {
-        ++m_error_count;
+        m_errors.push_back(word);
         auto alternatives = m_dict.hunspell().suggest(word);
         auto choice       = ask_user(word, alternatives);
         if(choice.choice == UserDecision::Choice::IGNORE)
@@ -81,7 +81,7 @@ UserDecision HunspellFixer::ask_user(std::string error_word,
         ret.chosen_word = std::stoi(decision_str) - 1;
         ret.choice      = UserDecision::Choice::REPLACE;
     }
-    catch(const std::invalid_argument& e)
+    catch(const std::invalid_argument&)
     {
         if(decision_str == "i")
             ret.choice = UserDecision::Choice::IGNORE;

@@ -21,38 +21,34 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 **/
 
-#include "custom_dictionary.hpp"
+#include <clipp.h>
 
-#include "../log.hpp"
-#include <fstream>
 #include <iostream>
+
+#include "cspl.hpp"
+
+using clipp::make_man_page;
+using clipp::option;
+using clipp::parse;
+using clipp::usage_lines;
+using clipp::value;
 
 using std::cout;
 
-CustomDictionary::CustomDictionary(const std::string& filename)
-    : m_path(filename)
+int main(int argc, char** argv)
 {
-    cout << "Creating dictionary from file " << filename << "\n";
+    RunConfig cfg;
+    auto cli = (option("-i", "--interactive")
+                    .doc("fix errors interactively")
+                    .set(cfg.interactive),
+                value("file", cfg.file).doc("input file"));
 
-    std::ifstream infile(filename);
-    std::string word;
-    while(infile >> word)
+    if(parse(argc, argv, cli) && cfg.validate())
     {
-        m_words.push_back(word);
+        cspl(cfg);
     }
-}
-
-CustomDictionary::~CustomDictionary()
-{
-    std::ofstream out(m_path);
-    for(const auto& word : m_words)
+    else
     {
-        out << word << "\n";
+        cout << make_man_page(cli, argv[0]) << '\n';
     }
-    out.close();
-}
-
-void CustomDictionary::add(const Word& word)
-{
-    m_words.push_back(word);
 }

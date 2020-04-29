@@ -21,38 +21,11 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 **/
 
-#include "custom_dictionary.hpp"
+#ifndef SRC__CSPL_HPP
+#define SRC__CSPL_HPP
 
-#include "../log.hpp"
-#include <fstream>
-#include <iostream>
+#include "run_config.hpp"
 
-using std::cout;
+int cspl(RunConfig& cfg);
 
-CustomDictionary::CustomDictionary(const std::string& filename)
-    : m_path(filename)
-{
-    cout << "Creating dictionary from file " << filename << "\n";
-
-    std::ifstream infile(filename);
-    std::string word;
-    while(infile >> word)
-    {
-        m_words.push_back(word);
-    }
-}
-
-CustomDictionary::~CustomDictionary()
-{
-    std::ofstream out(m_path);
-    for(const auto& word : m_words)
-    {
-        out << word << "\n";
-    }
-    out.close();
-}
-
-void CustomDictionary::add(const Word& word)
-{
-    m_words.push_back(word);
-}
+#endif // SRC__CSPL_HPP

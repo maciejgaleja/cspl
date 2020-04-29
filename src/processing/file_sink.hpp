@@ -31,25 +31,38 @@
 
 #include <iostream>
 
-class StdioSink : public CharSink, public WordSink
+class FileSink : public CharSink, public WordSink
 {
 public:
+	FileSink(const std::string& filename): m_file(filename){
+
+	}
+
     void add(Char c)
     {
-        m_buffer << c;
+        if(c != '\0')
+        {
+            m_buffer << c;
+        }
     }
+
     void add(const Word& word)
     {
         m_buffer << word;
     }
+
     void flush()
     {
-        std::cout << m_buffer.str();
+        std::ofstream outFile;
+        outFile.open(m_file);
+        outFile << m_buffer.str();
+        outFile.close();
         m_buffer.str("");
     }
 
 private:
     std::stringstream m_buffer;
+    std::string m_file;
 };
 
 #endif // SRC__PROCESSING__STDIO_SINK_HPP

@@ -25,10 +25,11 @@
 #define SRC__PROCESSING__FILE_SOURCE_HPP
 
 #include "char_source.hpp"
+#include "char_iterator.hpp"
 
 #include <fstream>
 
-class FileSource : public CharSource
+class FileSource : public CharSource, public CharIterator
 {
 public:
     FileSource(const std::string& filename);

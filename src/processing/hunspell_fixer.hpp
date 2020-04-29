@@ -34,7 +34,7 @@ struct UserDecision
         IGNORE,
         ADD
     };
-    Choice choice;
+    Choice choice   = Choice::IGNORE;
     int chosen_word = -1;
 };
 

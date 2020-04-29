@@ -21,38 +21,14 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 **/
 
-#include "custom_dictionary.hpp"
+#ifndef SRC__PROCESSING__CHAR_ITERATOR_HPP
+#define SRC__PROCESSING__CHAR_ITERATOR_HPP
 
-#include "../log.hpp"
-#include <fstream>
-#include <iostream>
-
-using std::cout;
-
-CustomDictionary::CustomDictionary(const std::string& filename)
-    : m_path(filename)
+class CharIterator
 {
-    cout << "Creating dictionary from file " << filename << "\n";
+public:
+    virtual ~CharIterator() {}
+    virtual bool next() = 0;
+};
 
-    std::ifstream infile(filename);
-    std::string word;
-    while(infile >> word)
-    {
-        m_words.push_back(word);
-    }
-}
-
-CustomDictionary::~CustomDictionary()
-{
-    std::ofstream out(m_path);
-    for(const auto& word : m_words)
-    {
-        out << word << "\n";
-    }
-    out.close();
-}
-
-void CustomDictionary::add(const Word& word)
-{
-    m_words.push_back(word);
-}
+#endif // SRC__PROCESSING__CHAR_ITERATOR_HPP

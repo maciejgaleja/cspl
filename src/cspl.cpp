@@ -23,37 +23,85 @@
 
 #include <iostream>
 
+#include "cspl.hpp"
+
 #include "processing/char_filter.hpp"
 #include "processing/file_source.hpp"
 #include "processing/hunspell_checker.hpp"
 #include "processing/hunspell_fixer.hpp"
-#include "processing/stdio_sink.hpp"
+#include "processing/file_sink.hpp"
+#include "processing/stdio_source.hpp"
 #include "processing/word_converter.hpp"
 
 #include "dictionary/dictionary.hpp"
 
 #include <hunspell.hxx>
 
-    using std::make_shared;
+using std::make_shared;
 using std::shared_ptr;
 
-int main(int argc, char** argv)
+int cspl(RunConfig& cfg)
 {
     Hunspell hs("C:\\Hunspell\\en_US.aff", "C:\\Hunspell\\en_US.dic");
     Dictionary dict(hs, "en_US", ".");
 
-    FileSource source(argv[1]);
+    shared_ptr<CharSource> source;
+    if(cfg.file.size() > 0)
+    {
+        source = make_shared<FileSource>(cfg.file);
+    }
+    else
+    {
+        source = make_shared<StdioSource>();
+    }
+
     shared_ptr<CharFilter> filter = make_shared<CharFilter>();
-    source.add_sink(filter);
+    source->add_sink(filter);
+
     shared_ptr<WordConverter> conv = make_shared<WordConverter>();
     filter->add_match_sink(conv);
-    shared_ptr<StdioSink> sink = make_shared<StdioSink>();
+
+
+    shared_ptr<HunspellChecker> checker;
+    if(cfg.interactive)
+    {
+        checker = make_shared<HunspellFixer>(dict);
+    }
+    else
+    {
+        checker = make_shared<HunspellChecker>(dict);
+    }
+    conv->add_word_sink(checker);
+
+    shared_ptr<FileSink> sink;
+	if(cfg.interactive && (cfg.file.size() > 0))
+    {
+        sink = make_shared<FileSink>(cfg.file);
+    checker->add_word_sink(sink);
     conv->add_char_sink(sink);
-    shared_ptr<HunspellFixer> h_fix = make_shared<HunspellFixer>(dict);
-    conv->add_word_sink(h_fix);
-    h_fix->add_word_sink(sink);
-    while(source.next())
+    }
+
+    while(source->next())
     {
     }
-    sink->flush();
+    source.reset();
+
+	if(sink)
+    {
+        sink->flush();
+    }
+
+    int ret = checker->errors().size() > 0;
+    if(cfg.interactive)
+    {
+        ret = 0;
+    }
+    else
+    {
+        for(const auto& w : checker->errors())
+        {
+            std::cout << w << "\n";
+        }
+    }
+    return ret;
 }

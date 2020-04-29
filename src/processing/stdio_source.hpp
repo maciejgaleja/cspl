@@ -25,8 +25,9 @@
 #define SRC__PROCESSING__STDIO_SOURCE_HPP
 
 #include "char_source.hpp"
+#include "char_iterator.hpp"
 
-class StdioSource : public CharSource
+class StdioSource : public CharSource, public CharIterator
 {
 public:
     bool next();

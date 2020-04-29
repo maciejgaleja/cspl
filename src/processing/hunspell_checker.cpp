@@ -29,7 +29,7 @@ void HunspellChecker::add(const Word& word)
 {
     if(!m_dict.hunspell().spell(word.c_str()))
     {
-        ++m_error_count;
+        m_errors.push_back(word);
     }
     notify_all_words(word);
 }

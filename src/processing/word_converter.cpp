@@ -74,7 +74,7 @@ void WordConverter::notify_all_chars(Char c)
 
 bool WordConverter::is_separator(Char c)
 {
-    const std::vector<Char> separators = {'\0', ' ', ',', '\n', '\r'};
+    const std::vector<Char> separators = {'\0', ' ', ',', '\n', '\r','"','\'', '(',')','{','}','[',']','.',':',';'};
     bool ret                           = any_of(
         separators.begin(), separators.end(), [c](Char s) { return s == c; });
     return ret;

@@ -21,39 +21,34 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 **/
 
-#include <iostream>
+#ifndef SRC__DICTIONARY__CUSTOM_DICTIONARY_HPP
+#define SRC__DICTIONARY__CUSTOM_DICTIONARY_HPP
 
-#include "processing/char_filter.hpp"
-#include "processing/file_source.hpp"
-#include "processing/hunspell_checker.hpp"
-#include "processing/hunspell_fixer.hpp"
-#include "processing/stdio_sink.hpp"
-#include "processing/word_converter.hpp"
+#include "../processing/common.hpp"
+#include <string>
+#include <vector>
 
-#include "dictionary/dictionary.hpp"
-
-#include <hunspell.hxx>
-
-    using std::make_shared;
-using std::shared_ptr;
-
-int main(int argc, char** argv)
+class CustomDictionary
 {
-    Hunspell hs("C:\\Hunspell\\en_US.aff", "C:\\Hunspell\\en_US.dic");
-    Dictionary dict(hs, "en_US", ".");
+public:
+    CustomDictionary(const std::string& filename);
+    ~CustomDictionary();
 
-    FileSource source(argv[1]);
-    shared_ptr<CharFilter> filter = make_shared<CharFilter>();
-    source.add_sink(filter);
-    shared_ptr<WordConverter> conv = make_shared<WordConverter>();
-    filter->add_match_sink(conv);
-    shared_ptr<StdioSink> sink = make_shared<StdioSink>();
-    conv->add_char_sink(sink);
-    shared_ptr<HunspellFixer> h_fix = make_shared<HunspellFixer>(dict);
-    conv->add_word_sink(h_fix);
-    h_fix->add_word_sink(sink);
-    while(source.next())
+    const std::vector<Word>& words() const
     {
+        return m_words;
     }
-    sink->flush();
-}
+
+    const std::string& path() const
+    {
+        return m_path;
+    }
+
+    void add(const Word& word);
+
+private:
+    std::vector<Word> m_words;
+    std::string m_path;
+};
+
+#endif // SRC__DICTIONARY__CUSTOM_DICTIONARY_HPP

@@ -1,0 +1,109 @@
+{
+    "code": {
+        "line_width": 80,
+        "newline": "\n"
+    },
+    "comment": {
+        "basic_begin": "/* ",
+        "basic_end": " */",
+        "block_begin": "/**",
+        "block_end": " */",
+        "continued_begin": " * ",
+        "continued_end": " * ",
+        "doxy_is_just_right": false,
+        "doxy_just_width": 15,
+        "solid_fill_character": "*"
+    },
+    "footer": {
+        "content": [
+            "/******************************************************************************/"
+        ]
+    },
+    "header": {
+        "file_base_path": [
+            [
+                ""
+            ]
+        ],
+        "filename_only": false,
+        "is_block_comment": true,
+        "template": [
+            "/**",
+            " * Copyright (c) 2020 Maciej Galeja",
+            " * ",
+            " * Permission is hereby granted, free of charge, to any person obtaining",
+            " * a copy of this software and associated documentation files (the",
+            " * \"Software\"), to deal in the Software without restriction, including",
+            " * without limitation the rights to use, copy, modify, merge, publish,",
+            " * distribute, sublicense, and/or sell copies of the Software, and to",
+            " * permit persons to whom the Software is furnished to do so, subject to",
+            " * the following conditions:",
+            " * ",
+            " * The above copyright notice and this permission notice shall be included",
+            " * in all copies or substantial portions of the Software.",
+            " * ",
+            " * THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND,",
+            " * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF",
+            " * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.",
+            " * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY",
+            " * CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,",
+            " * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE",
+            " * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.",
+            "**/"
+        ]
+    },
+    "header_guard": {
+        "endif_comment_begin": "// ",
+        "endif_comment_end": "",
+        "extension_separator": "_",
+        "file_base_path": [
+            [
+                ""
+            ]
+        ],
+        "path_separator": "__",
+        "prefix": "",
+        "suffix": ""
+    },
+    "main": {
+        "clang_format_executable": "clang-format",
+        "git_executable": "git"
+    },
+    "metadata": {
+        "authors_exclude": [
+            ""
+        ],
+        "authors_include_email": true
+    },
+    "operations": {
+        "clang_format": true,
+        "format_footer": false,
+        "format_header": true,
+        "header_guard": true,
+        "sections": false
+    },
+    "scope": {
+        "extensions_header": [
+            "h",
+            "hpp",
+            "hxx"
+        ],
+        "extensions_source": [
+            "c",
+            "cpp",
+            "cxx",
+            "cc"
+        ],
+        "source_directories": [
+            "./src/"
+        ]
+    },
+    "sections": {
+        "solid_comment_line": true,
+        "templates": {
+            "Includes": [
+                "#include "
+            ]
+        }
+    }
+}

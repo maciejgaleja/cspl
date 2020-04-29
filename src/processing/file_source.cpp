@@ -21,39 +21,27 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 **/
 
+#include "file_source.hpp"
+
 #include <iostream>
 
-#include "processing/char_filter.hpp"
-#include "processing/file_source.hpp"
-#include "processing/hunspell_checker.hpp"
-#include "processing/hunspell_fixer.hpp"
-#include "processing/stdio_sink.hpp"
-#include "processing/word_converter.hpp"
+FileSource::FileSource(const std::string& filename) : m_in(filename) {}
 
-#include "dictionary/dictionary.hpp"
-
-#include <hunspell.hxx>
-
-    using std::make_shared;
-using std::shared_ptr;
-
-int main(int argc, char** argv)
+bool FileSource::next()
 {
-    Hunspell hs("C:\\Hunspell\\en_US.aff", "C:\\Hunspell\\en_US.dic");
-    Dictionary dict(hs, "en_US", ".");
-
-    FileSource source(argv[1]);
-    shared_ptr<CharFilter> filter = make_shared<CharFilter>();
-    source.add_sink(filter);
-    shared_ptr<WordConverter> conv = make_shared<WordConverter>();
-    filter->add_match_sink(conv);
-    shared_ptr<StdioSink> sink = make_shared<StdioSink>();
-    conv->add_char_sink(sink);
-    shared_ptr<HunspellFixer> h_fix = make_shared<HunspellFixer>(dict);
-    conv->add_word_sink(h_fix);
-    h_fix->add_word_sink(sink);
-    while(source.next())
+    bool ret = true;
+    Char c;
+    if(m_in.good())
     {
+        if(m_in.get(c))
+        {
+            notify_all(c);
+        }
     }
-    sink->flush();
+    else
+    {
+        notify_all('\0');
+        ret = false;
+    }
+    return ret;
 }

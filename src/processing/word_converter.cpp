@@ -21,39 +21,61 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 **/
 
+#include "word_converter.hpp"
+
+#include <algorithm>
 #include <iostream>
 
-#include "processing/char_filter.hpp"
-#include "processing/file_source.hpp"
-#include "processing/hunspell_checker.hpp"
-#include "processing/hunspell_fixer.hpp"
-#include "processing/stdio_sink.hpp"
-#include "processing/word_converter.hpp"
+using std::any_of;
 
-#include "dictionary/dictionary.hpp"
-
-#include <hunspell.hxx>
-
-    using std::make_shared;
-using std::shared_ptr;
-
-int main(int argc, char** argv)
+void WordConverter::add(Char c)
 {
-    Hunspell hs("C:\\Hunspell\\en_US.aff", "C:\\Hunspell\\en_US.dic");
-    Dictionary dict(hs, "en_US", ".");
-
-    FileSource source(argv[1]);
-    shared_ptr<CharFilter> filter = make_shared<CharFilter>();
-    source.add_sink(filter);
-    shared_ptr<WordConverter> conv = make_shared<WordConverter>();
-    filter->add_match_sink(conv);
-    shared_ptr<StdioSink> sink = make_shared<StdioSink>();
-    conv->add_char_sink(sink);
-    shared_ptr<HunspellFixer> h_fix = make_shared<HunspellFixer>(dict);
-    conv->add_word_sink(h_fix);
-    h_fix->add_word_sink(sink);
-    while(source.next())
+    if(is_separator(c))
     {
+        std::string word = m_buffer.str();
+        m_buffer.str("");
+        if(word.length() > 0)
+        {
+            notify_all_words(word);
+        }
+        notify_all_chars(c);
     }
-    sink->flush();
+    else
+    {
+        m_buffer << c;
+    }
+}
+
+void WordConverter::add_word_sink(std::shared_ptr<WordSink> sink)
+{
+    m_word_sinks.push_back(sink);
+}
+
+void WordConverter::notify_all_words(Word word)
+{
+    for(auto& sink : m_word_sinks)
+    {
+        sink->add(word);
+    }
+}
+
+void WordConverter::add_char_sink(std::shared_ptr<CharSink> sink)
+{
+    m_char_sinks.push_back(sink);
+}
+
+void WordConverter::notify_all_chars(Char c)
+{
+    for(auto& sink : m_char_sinks)
+    {
+        sink->add(c);
+    }
+}
+
+bool WordConverter::is_separator(Char c)
+{
+    const std::vector<Char> separators = {'\0', ' ', ',', '\n', '\r'};
+    bool ret                           = any_of(
+        separators.begin(), separators.end(), [c](Char s) { return s == c; });
+    return ret;
 }

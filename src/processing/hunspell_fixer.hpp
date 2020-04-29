@@ -21,39 +21,32 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 **/
 
-#include <iostream>
+#ifndef SRC__PROCESSING__HUNSPELL_FIXER_HPP
+#define SRC__PROCESSING__HUNSPELL_FIXER_HPP
 
-#include "processing/char_filter.hpp"
-#include "processing/file_source.hpp"
-#include "processing/hunspell_checker.hpp"
-#include "processing/hunspell_fixer.hpp"
-#include "processing/stdio_sink.hpp"
-#include "processing/word_converter.hpp"
+#include "hunspell_checker.hpp"
 
-#include "dictionary/dictionary.hpp"
-
-#include <hunspell.hxx>
-
-    using std::make_shared;
-using std::shared_ptr;
-
-int main(int argc, char** argv)
+struct UserDecision
 {
-    Hunspell hs("C:\\Hunspell\\en_US.aff", "C:\\Hunspell\\en_US.dic");
-    Dictionary dict(hs, "en_US", ".");
-
-    FileSource source(argv[1]);
-    shared_ptr<CharFilter> filter = make_shared<CharFilter>();
-    source.add_sink(filter);
-    shared_ptr<WordConverter> conv = make_shared<WordConverter>();
-    filter->add_match_sink(conv);
-    shared_ptr<StdioSink> sink = make_shared<StdioSink>();
-    conv->add_char_sink(sink);
-    shared_ptr<HunspellFixer> h_fix = make_shared<HunspellFixer>(dict);
-    conv->add_word_sink(h_fix);
-    h_fix->add_word_sink(sink);
-    while(source.next())
+    enum class Choice
     {
-    }
-    sink->flush();
-}
+        REPLACE,
+        IGNORE,
+        ADD
+    };
+    Choice choice;
+    int chosen_word = -1;
+};
+
+class HunspellFixer : public HunspellChecker
+{
+public:
+    HunspellFixer(Dictionary& dict) : HunspellChecker(dict){};
+    void add(const Word& word);
+
+private:
+    UserDecision ask_user(std::string error_word,
+                          std::vector<std::string>& options);
+};
+
+#endif // SRC__PROCESSING__HUNSPELL_FIXER_HPP

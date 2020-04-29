@@ -21,39 +21,23 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 **/
 
-#include <iostream>
+#ifndef SRC__PROCESSING__HUNSPELL_CHECKER_HPP
+#define SRC__PROCESSING__HUNSPELL_CHECKER_HPP
 
-#include "processing/char_filter.hpp"
-#include "processing/file_source.hpp"
-#include "processing/hunspell_checker.hpp"
-#include "processing/hunspell_fixer.hpp"
-#include "processing/stdio_sink.hpp"
-#include "processing/word_converter.hpp"
+#include "word_sink.hpp"
+#include "word_source.hpp"
 
-#include "dictionary/dictionary.hpp"
+#include "../dictionary/dictionary.hpp"
 
-#include <hunspell.hxx>
-
-    using std::make_shared;
-using std::shared_ptr;
-
-int main(int argc, char** argv)
+class HunspellChecker : public WordSink, public WordSource
 {
-    Hunspell hs("C:\\Hunspell\\en_US.aff", "C:\\Hunspell\\en_US.dic");
-    Dictionary dict(hs, "en_US", ".");
+public:
+    HunspellChecker(Dictionary& dict) : m_dict(dict){};
+    void add(const Word& word);
 
-    FileSource source(argv[1]);
-    shared_ptr<CharFilter> filter = make_shared<CharFilter>();
-    source.add_sink(filter);
-    shared_ptr<WordConverter> conv = make_shared<WordConverter>();
-    filter->add_match_sink(conv);
-    shared_ptr<StdioSink> sink = make_shared<StdioSink>();
-    conv->add_char_sink(sink);
-    shared_ptr<HunspellFixer> h_fix = make_shared<HunspellFixer>(dict);
-    conv->add_word_sink(h_fix);
-    h_fix->add_word_sink(sink);
-    while(source.next())
-    {
-    }
-    sink->flush();
-}
+protected:
+    Dictionary& m_dict;
+    unsigned m_error_count = 0;
+};
+
+#endif // SRC__PROCESSING__HUNSPELL_CHECKER_HPP

@@ -1,0 +1,106 @@
+{
+    "src/cspl.cpp": {
+        "additional_authors": [],
+        "brief": ""
+    },
+    "src/dictionary/custom_dictionary.cpp": {
+        "additional_authors": [],
+        "brief": ""
+    },
+    "src/dictionary/custom_dictionary.hpp": {
+        "additional_authors": [],
+        "brief": ""
+    },
+    "src/dictionary/dictionary.cpp": {
+        "additional_authors": [],
+        "brief": ""
+    },
+    "src/dictionary/dictionary.hpp": {
+        "additional_authors": [],
+        "brief": ""
+    },
+    "src/log.hpp": {
+        "additional_authors": [],
+        "brief": ""
+    },
+    "src/processing/char_filter.cpp": {
+        "additional_authors": [],
+        "brief": ""
+    },
+    "src/processing/char_filter.hpp": {
+        "additional_authors": [],
+        "brief": ""
+    },
+    "src/processing/char_sink.hpp": {
+        "additional_authors": [],
+        "brief": ""
+    },
+    "src/processing/char_source.cpp": {
+        "additional_authors": [],
+        "brief": ""
+    },
+    "src/processing/char_source.hpp": {
+        "additional_authors": [],
+        "brief": ""
+    },
+    "src/processing/common.hpp": {
+        "additional_authors": [],
+        "brief": ""
+    },
+    "src/processing/file_source.cpp": {
+        "additional_authors": [],
+        "brief": ""
+    },
+    "src/processing/file_source.hpp": {
+        "additional_authors": [],
+        "brief": ""
+    },
+    "src/processing/hunspell_checker.cpp": {
+        "additional_authors": [],
+        "brief": ""
+    },
+    "src/processing/hunspell_checker.hpp": {
+        "additional_authors": [],
+        "brief": ""
+    },
+    "src/processing/hunspell_fixer.cpp": {
+        "additional_authors": [],
+        "brief": ""
+    },
+    "src/processing/hunspell_fixer.hpp": {
+        "additional_authors": [],
+        "brief": ""
+    },
+    "src/processing/stdio_sink.hpp": {
+        "additional_authors": [],
+        "brief": ""
+    },
+    "src/processing/stdio_source.cpp": {
+        "additional_authors": [],
+        "brief": ""
+    },
+    "src/processing/stdio_source.hpp": {
+        "additional_authors": [],
+        "brief": ""
+    },
+    "src/processing/word_converter.cpp": {
+        "additional_authors": [],
+        "brief": ""
+    },
+    "src/processing/word_converter.hpp": {
+        "additional_authors": [],
+        "brief": ""
+    },
+    "src/processing/word_sink.hpp": {
+        "additional_authors": [],
+        "brief": ""
+    },
+    "src/processing/word_source.cpp": {
+        "additional_authors": [],
+        "brief": ""
+    },
+    "src/processing/word_source.hpp": {
+        "additional_authors": [],
+        "brief": ""
+    }
+}

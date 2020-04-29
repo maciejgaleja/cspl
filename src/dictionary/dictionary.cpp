@@ -36,7 +36,6 @@ Dictionary::Dictionary(Hunspell& hs,
                        const std::string& root_path)
     : m_hs(hs)
 {
-    log << "Creating dictionary for path " << root_path << "\n";
     for(const auto& p : get_parent_paths(root_path))
     {
         fs::path dict_p = p;

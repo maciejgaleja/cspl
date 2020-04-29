@@ -37,6 +37,7 @@ using std::cout;
 
 int main(int argc, char** argv)
 {
+    int ret = -1;
     RunConfig cfg;
     auto cli = (option("-i", "--interactive")
                     .doc("fix errors interactively")
@@ -45,10 +46,11 @@ int main(int argc, char** argv)
 
     if(parse(argc, argv, cli) && cfg.validate())
     {
-        cspl(cfg);
+        ret = cspl(cfg);
     }
     else
     {
         cout << make_man_page(cli, argv[0]) << '\n';
     }
+    return ret;
 }

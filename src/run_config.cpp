@@ -54,7 +54,7 @@ bool RunConfig::add_filter(const std::vector<std::string>& filters)
             if(t == "\\n")
             {
                 t = "\n";
-			}
+            }
         }
         if(tokens.size() >= 2)
         {

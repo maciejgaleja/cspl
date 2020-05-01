@@ -24,9 +24,9 @@
 #include "custom_dictionary.hpp"
 
 #include "../log.hpp"
+#include <algorithm>
 #include <fstream>
 #include <iostream>
-#include <algorithm>
 
 
 CustomDictionary::CustomDictionary(const std::string& filename)

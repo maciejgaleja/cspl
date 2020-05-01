@@ -33,7 +33,7 @@ struct UserDecision
         REPLACE,
         IGNORE,
         ADD,
-		CUSTOM
+        CUSTOM
     };
     Choice choice   = Choice::IGNORE;
     int chosen_word = -1;

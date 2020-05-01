@@ -26,6 +26,7 @@
 #include "../log.hpp"
 #include <fstream>
 #include <iostream>
+#include <algorithm>
 
 
 CustomDictionary::CustomDictionary(const std::string& filename)
@@ -42,6 +43,7 @@ CustomDictionary::CustomDictionary(const std::string& filename)
 CustomDictionary::~CustomDictionary()
 {
     std::ofstream out(m_path);
+    std::sort(m_words.begin(), m_words.end());
     for(const auto& word : m_words)
     {
         out << word << "\n";

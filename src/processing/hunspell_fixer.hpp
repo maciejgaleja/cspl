@@ -32,10 +32,12 @@ struct UserDecision
     {
         REPLACE,
         IGNORE,
-        ADD
+        ADD,
+		CUSTOM
     };
     Choice choice   = Choice::IGNORE;
     int chosen_word = -1;
+    std::string custom_word;
 };
 
 class HunspellFixer : public HunspellChecker

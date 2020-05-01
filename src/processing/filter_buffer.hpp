@@ -21,27 +21,26 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 **/
 
-#ifndef SRC__PROCESSING__WORD_SOURCE_HPP
-#define SRC__PROCESSING__WORD_SOURCE_HPP
+#ifndef SRC__PROCESSING__FILTER_BUFFER_HPP
+#define SRC__PROCESSING__FILTER_BUFFER_HPP
 
-#include <string>
+#include <deque>
 
-#include <vector>
+#include "common.hpp"
+#include <map>
 
-#include <memory>
-
-#include "word_sink.hpp"
-
-class WordSource
+class FilterBuffer
 {
 public:
-    void add_word_sink(std::shared_ptr<WordSink> sink);
+    FilterBuffer(const std::string& pattern);
+    std::pair<bool, Char> add(Char c);
+    size_t size() const;
 
 private:
-    std::vector<std::shared_ptr<WordSink>> m_word_sinks;
+    std::deque<Char> m_buffer;
+    std::deque<Char> m_pattern;
 
-protected:
-    void notify_all_words(const Word& word);
+    std::string debugToString(const std::deque<Char>& m_buffer);
 };
 
-#endif // SRC__PROCESSING__WORD_SOURCE_HPP
+#endif // SRC__PROCESSING__FILTER_BUFFER_HPP

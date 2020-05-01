@@ -24,12 +24,11 @@
 #ifndef SRC__PROCESSING__FILE_SOURCE_HPP
 #define SRC__PROCESSING__FILE_SOURCE_HPP
 
-#include "char_source.hpp"
-#include "char_iterator.hpp"
+#include "item_iterator.hpp"
 
 #include <fstream>
 
-class FileSource : public CharSource, public CharIterator
+class FileSource : public ItemIterator<Char>
 {
 public:
     FileSource(const std::string& filename);

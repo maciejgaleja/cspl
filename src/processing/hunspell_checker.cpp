@@ -31,5 +31,5 @@ void HunspellChecker::add(const Word& word)
     {
         m_errors.push_back(word);
     }
-    notify_all_words(word);
+    notify_all(word);
 }

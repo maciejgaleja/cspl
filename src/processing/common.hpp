@@ -29,4 +29,6 @@
 typedef char Char;
 typedef std::string Word;
 
+constexpr char ASCII_ACK = '\6';
+
 #endif // SRC__PROCESSING__COMMON_HPP

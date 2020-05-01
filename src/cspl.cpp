@@ -26,26 +26,27 @@
 #include "cspl.hpp"
 
 #include "processing/char_filter.hpp"
+#include "processing/file_sink.hpp"
 #include "processing/file_source.hpp"
 #include "processing/hunspell_checker.hpp"
 #include "processing/hunspell_fixer.hpp"
-#include "processing/file_sink.hpp"
+#include "processing/item_iterator.hpp"
 #include "processing/stdio_source.hpp"
 #include "processing/word_converter.hpp"
 
 #include "dictionary/dictionary.hpp"
 
+#include "log.hpp"
+
 #include <hunspell.hxx>
 
 using std::make_shared;
 using std::shared_ptr;
+using std::vector;
 
-int cspl(RunConfig& cfg)
+int cspl_check(RunConfig& cfg, Dictionary& dict)
 {
-    Hunspell hs("C:\\Hunspell\\en_US.aff", "C:\\Hunspell\\en_US.dic");
-    Dictionary dict(hs, "en_US", ".");
-
-    shared_ptr<CharSource> source;
+    shared_ptr<ItemIterator<Char>> source;
     if(cfg.file.size() > 0)
     {
         source = make_shared<FileSource>(cfg.file);
@@ -55,12 +56,45 @@ int cspl(RunConfig& cfg)
         source = make_shared<StdioSource>();
     }
 
-    shared_ptr<CharFilter> filter = make_shared<CharFilter>();
-    source->add_sink(filter);
-
     shared_ptr<WordConverter> conv = make_shared<WordConverter>();
-    filter->add_match_sink(conv);
 
+    shared_ptr<FileSink> sink;
+    if(cfg.interactive && (cfg.file.size() > 0))
+    {
+        sink = make_shared<FileSink>(cfg.file);
+        conv->add_char_sink(sink);
+    }
+
+    vector<shared_ptr<CharFilter>> filters;
+    if(cfg.filter.size() == 0)
+    {
+        source->add_sink(conv);
+    }
+    else
+    {
+        shared_ptr<CharFilter> src;
+        for(auto it = cfg.filter.begin(); it != cfg.filter.end(); ++it)
+        {
+            auto spec = *it;
+            auto filter =
+                make_shared<CharFilter>(spec.begin, spec.end, spec.inverted);
+            filters.push_back(filter);
+            if(src)
+            {
+                src->add_unmatch_sink(filter);
+            }
+            else
+            {
+                source->add_sink(filter);
+            }
+            filter->add_match_sink(conv);
+            src = filter;
+        }
+        if(sink)
+        {
+            filters.back()->add_unmatch_sink(sink);
+        }
+    }
 
     shared_ptr<HunspellChecker> checker;
     if(cfg.interactive)
@@ -71,22 +105,18 @@ int cspl(RunConfig& cfg)
     {
         checker = make_shared<HunspellChecker>(dict);
     }
-    conv->add_word_sink(checker);
-
-    shared_ptr<FileSink> sink;
-	if(cfg.interactive && (cfg.file.size() > 0))
+    if(sink)
     {
-        sink = make_shared<FileSink>(cfg.file);
-    checker->add_word_sink(sink);
-    conv->add_char_sink(sink);
+        checker->add_sink(sink);
     }
+    conv->add_word_sink(checker);
 
     while(source->next())
     {
     }
     source.reset();
 
-	if(sink)
+    if(sink)
     {
         sink->flush();
     }
@@ -102,6 +132,40 @@ int cspl(RunConfig& cfg)
         {
             std::cout << w << "\n";
         }
+    }
+    return ret;
+}
+
+int cspl_add(RunConfig& cfg, Dictionary& dict)
+{
+    int ret = 0;
+
+    for(const Word& w : cfg.words_to_add)
+    {
+        dict.add(w);
+    }
+
+    return ret;
+}
+
+int cspl(RunConfig& cfg)
+{
+    int ret = 0;
+    Hunspell hs("C:\\Hunspell\\en_US.aff", "C:\\Hunspell\\en_US.dic");
+    Dictionary dict(hs, cfg.language, ".");
+
+    switch(cfg.mode)
+    {
+    case RunConfig::OpMode::CHECK:
+        ret = cspl_check(cfg, dict);
+        break;
+    case RunConfig::OpMode::CREATE:
+        break;
+    case RunConfig::OpMode::ADD:
+        ret = cspl_add(cfg, dict);
+        break;
+    default:
+        break;
     }
     return ret;
 }

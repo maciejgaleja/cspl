@@ -21,17 +21,43 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 **/
 
-#include "char_source.hpp"
+#include "filter_buffer.hpp"
+#include <algorithm>
+#include <iostream>
 
-void CharSource::add_sink(std::shared_ptr<CharSink> sink)
+FilterBuffer::FilterBuffer(const std::string& pattern)
 {
-    m_sinks.push_back(sink);
+    for(char c : pattern)
+    {
+        m_pattern.push_back(c);
+        m_buffer.push_back('\0');
+    }
 }
 
-void CharSource::notify_all(Char c)
+size_t FilterBuffer::size() const
 {
-    for(auto& sink : m_sinks)
+    return m_pattern.size();
+}
+
+std::pair<bool, Char> FilterBuffer::add(Char c)
+{
+    Char ret_c = m_buffer[0];
+    m_buffer.pop_front();
+    m_buffer.push_back(c);
+
+    bool ret = std::equal(m_pattern.begin(), m_pattern.end(), m_buffer.begin());
+    //std::cout << debugToString(m_buffer) << " " << ret << "\n";
+
+    return {ret, ret_c};
+}
+
+std::string FilterBuffer::debugToString(const std::deque<Char>& buffer)
+{
+    std::string ret = "[";
+    for(char c : buffer)
     {
-        sink->add(c);
+        ret += c;
     }
+    ret += "]";
+    return ret;
 }

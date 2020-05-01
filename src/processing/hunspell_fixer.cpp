@@ -38,21 +38,25 @@ void HunspellFixer::add(const Word& word)
         auto choice       = ask_user(word, alternatives);
         if(choice.choice == UserDecision::Choice::IGNORE)
         {
-            notify_all_words(word);
+            notify_all(word);
         }
         else if(choice.choice == UserDecision::Choice::ADD)
         {
             m_dict.add(word);
-            notify_all_words(word);
+            notify_all(word);
         }
+		else if (choice.choice == UserDecision::Choice::CUSTOM)
+		{
+            add(choice.custom_word);
+		}
         else
         {
-            notify_all_words(alternatives[choice.chosen_word]);
+            notify_all(alternatives[choice.chosen_word]);
         }
     }
     else
     {
-        notify_all_words(word);
+        notify_all(word);
     }
 }
 
@@ -72,6 +76,7 @@ UserDecision HunspellFixer::ask_user(std::string error_word,
     }
     cout << "i: ignore\n";
     cout << "a: add to dictionary\n";
+    cout << "c: custom word\n";
 
     std::string decision_str;
     cin >> decision_str;
@@ -87,6 +92,13 @@ UserDecision HunspellFixer::ask_user(std::string error_word,
             ret.choice = UserDecision::Choice::IGNORE;
         else if(decision_str == "a")
             ret.choice = UserDecision::Choice::ADD;
+        else if(decision_str == "c")
+        {
+            ret.choice = UserDecision::Choice::CUSTOM;
+            cout << "Type the correct wor below\n";
+            cin >> decision_str;
+            ret.custom_word = decision_str;
+        }
         else
         {
             cout << "Invalid option";

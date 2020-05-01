@@ -23,12 +23,9 @@
 
 #include "word_converter.hpp"
 
-#include <algorithm>
 #include <iostream>
 
-using std::any_of;
-
-void WordConverter::add(Char c)
+void WordConverter::add(const Char& c)
 {
     if(is_separator(c))
     {
@@ -38,7 +35,10 @@ void WordConverter::add(Char c)
         {
             notify_all_words(word);
         }
-        notify_all_chars(c);
+        if(c != ASCII_ACK)
+        {
+            notify_all_chars(c);
+        }
     }
     else
     {
@@ -46,7 +46,7 @@ void WordConverter::add(Char c)
     }
 }
 
-void WordConverter::add_word_sink(std::shared_ptr<WordSink> sink)
+void WordConverter::add_word_sink(std::shared_ptr<ItemSink<Word>> sink)
 {
     m_word_sinks.push_back(sink);
 }
@@ -59,7 +59,7 @@ void WordConverter::notify_all_words(Word word)
     }
 }
 
-void WordConverter::add_char_sink(std::shared_ptr<CharSink> sink)
+void WordConverter::add_char_sink(std::shared_ptr<ItemSink<Char>> sink)
 {
     m_char_sinks.push_back(sink);
 }
@@ -74,8 +74,5 @@ void WordConverter::notify_all_chars(Char c)
 
 bool WordConverter::is_separator(Char c)
 {
-    const std::vector<Char> separators = {'\0', ' ', ',', '\n', '\r','"','\'', '(',')','{','}','[',']','.',':',';'};
-    bool ret                           = any_of(
-        separators.begin(), separators.end(), [c](Char s) { return s == c; });
-    return ret;
+    return !((c >= '0' && c <= '9') || (c >= 'A' && c <= 'z'));
 }

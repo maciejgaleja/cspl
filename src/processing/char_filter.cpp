@@ -46,16 +46,14 @@ void CharFilter::add(const Char& c)
     Char c_fwd = match_end.second;
     if(c_fwd != '\0')
     {
-        cout << m_active << " " << std::setw(2) << m_delay;
         if(m_active && (m_delay < 0))
         {
-            cout << " -----> " << c_fwd << "\n";
+            notify_match(c);
         }
         else
         {
-            cout << " ----->     " << c_fwd << "\n";
+            notify_unmatch(c);
         }
-        notify_match(c);
     }
     if(match_end.first)
     {

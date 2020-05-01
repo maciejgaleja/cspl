@@ -92,7 +92,6 @@ int cspl_check(RunConfig& cfg, Dictionary& dict)
         }
         if(sink)
         {
-            log << "Last filter will write to sink\n";
             filters.back()->add_unmatch_sink(sink);
         }
     }

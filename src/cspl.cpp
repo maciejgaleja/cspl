@@ -40,6 +40,7 @@
 
 using std::make_shared;
 using std::shared_ptr;
+using std::vector;
 
 int cspl(RunConfig& cfg)
 {
@@ -56,13 +57,25 @@ int cspl(RunConfig& cfg)
         source = make_shared<StdioSource>();
     }
 
-    //shared_ptr<CharFilter> filter = make_shared<CharFilter>("/*", "*/");
-    shared_ptr<CharFilter> filter = make_shared<CharFilter>("#", "\n");
-    source->add_sink(filter);
-
     shared_ptr<WordConverter> conv = make_shared<WordConverter>();
-    filter->add_match_sink(conv);
 
+    vector<shared_ptr<CharFilter>> filters;
+    if(cfg.filter.size() == 0)
+    {
+        source->add_sink(conv);
+    }
+    else
+    {
+        for(auto it = cfg.filter.begin(); it != cfg.filter.end(); ++it)
+        {
+            auto spec = *it;
+            auto filter =
+                make_shared<CharFilter>(spec.begin, spec.end, spec.inverted);
+            filters.push_back(filter);
+            source->add_sink(filter);
+            filter->add_match_sink(conv);
+        }
+    }
 
     shared_ptr<HunspellChecker> checker;
     if(cfg.interactive)

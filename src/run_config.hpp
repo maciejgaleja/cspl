@@ -25,6 +25,14 @@
 #define SRC__RUN_CONFIG_HPP
 
 #include <string>
+#include <vector>
+
+struct FilterSpecification
+{
+    std::string begin = "";
+    std::string end   = "";
+    bool inverted     = false;
+};
 
 class RunConfig
 {
@@ -32,7 +40,10 @@ public:
     std::string file = "";
     bool interactive = false;
 
+	std::vector<FilterSpecification> filter;
+
     bool validate();
+    bool add_filter(const std::vector<std::string> &filters);
 };
 
 #endif // SRC__RUN_CONFIG_HPP

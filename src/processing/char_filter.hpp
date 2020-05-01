@@ -25,6 +25,8 @@
 #ifndef SRC__PROCESSING__CHAR_FILTER_HPP
 #define SRC__PROCESSING__CHAR_FILTER_HPP
 
+#include <functional>
+
 #include "common.hpp"
 #include "filter_buffer.hpp"
 #include "item_sink.hpp"
@@ -33,7 +35,7 @@
 class CharFilter : public ItemSink<Char>
 {
 public:
-    CharFilter(const std::string& start, const std::string& end);
+    CharFilter(const std::string& start, const std::string& end, bool inverted = false);
     ~CharFilter() {}
     void add(const Char& c);
 
@@ -53,6 +55,10 @@ private:
     FilterBuffer m_buf_begin;
     FilterBuffer m_buf_end;
 
+    std::function<void(Char)> m_on_match;
+    std::function<void(Char)> m_on_unmatch;
+
+	bool m_invert = false;
     bool m_active = false;
     int m_delay;
 

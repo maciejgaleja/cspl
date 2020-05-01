@@ -24,13 +24,28 @@
 #include "char_filter.hpp"
 
 #include <iomanip>
+#include "..//log.hpp"
 #include <iostream>
 
 using std::cout;
 
-CharFilter::CharFilter(const std::string& start, const std::string& end)
-    : m_buf_begin(start), m_buf_end(end)
-{}
+CharFilter::CharFilter(const std::string& start,
+                       const std::string& end,
+                       bool inverted)
+    : m_buf_begin(start), m_buf_end(end), m_invert(inverted)
+{
+    if(inverted)
+    {
+        m_on_match   = [this](char c) { notify_unmatch(c); };
+        m_on_unmatch = [this](char c) { notify_match(c); };
+    }
+    else
+    {
+        m_on_match   = [this](char c) { notify_match(c); };
+        m_on_unmatch = [this](char c) { notify_unmatch(c); };
+    }
+    log << "Filtering: " << start << " ... " << end << "\n";
+}
 
 
 void CharFilter::add(const Char& c)
@@ -48,11 +63,11 @@ void CharFilter::add(const Char& c)
     {
         if(m_active && (m_delay < 0))
         {
-            notify_match(c);
+            m_on_match(c_fwd);
         }
         else
         {
-            notify_unmatch(c);
+            m_on_unmatch(c_fwd);
         }
     }
     if(match_end.first)

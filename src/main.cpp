@@ -30,21 +30,27 @@
 using clipp::make_man_page;
 using clipp::option;
 using clipp::parse;
+using clipp::repeatable;
 using clipp::usage_lines;
 using clipp::value;
+using clipp::values;
 
 using std::cout;
 
 int main(int argc, char** argv)
 {
     int ret = -1;
+    std::vector<std::string> filter_strings;
     RunConfig cfg;
     auto cli = (option("-i", "--interactive")
                     .doc("fix errors interactively")
                     .set(cfg.interactive),
+                repeatable(option("-f", "--filter")
+                     .doc("filter only words matching filter specification") &
+                 value("spec",filter_strings)),
                 value("file", cfg.file).doc("input file"));
 
-    if(parse(argc, argv, cli) && cfg.validate())
+    if(parse(argc, argv, cli) && cfg.add_filter(filter_strings) && cfg.validate())
     {
         ret = cspl(cfg);
     }

@@ -94,7 +94,7 @@ int Dictionary::ask_where_to_add_word(const Word& word)
     int n = 1;
     for(auto& d : m_custom)
     {
-        cout << n << ":  " << d.path() << "\n";
+        cout << n++ << ":  " << d.path() << "\n";
     }
 
     std::string decision_str;

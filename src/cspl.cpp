@@ -44,11 +44,8 @@ using std::make_shared;
 using std::shared_ptr;
 using std::vector;
 
-int cspl(RunConfig& cfg)
+int cspl_check(RunConfig& cfg, Dictionary& dict)
 {
-    Hunspell hs("C:\\Hunspell\\en_US.aff", "C:\\Hunspell\\en_US.dic");
-    Dictionary dict(hs, "en_US", ".");
-
     shared_ptr<ItemIterator<Char>> source;
     if(cfg.file.size() > 0)
     {
@@ -136,6 +133,40 @@ int cspl(RunConfig& cfg)
         {
             std::cout << w << "\n";
         }
+    }
+    return ret;
+}
+
+int cspl_add(RunConfig& cfg, Dictionary& dict)
+{
+    int ret = 0;
+
+    for(const Word& w : cfg.words_to_add)
+    {
+        dict.add(w);
+    }
+
+    return ret;
+}
+
+int cspl(RunConfig& cfg)
+{
+    int ret = 0;
+    Hunspell hs("C:\\Hunspell\\en_US.aff", "C:\\Hunspell\\en_US.dic");
+    Dictionary dict(hs, cfg.language, ".");
+
+    switch(cfg.mode)
+    {
+    case RunConfig::OpMode::CHECK:
+        ret = cspl_check(cfg, dict);
+        break;
+    case RunConfig::OpMode::CREATE:
+        break;
+    case RunConfig::OpMode::ADD:
+        ret = cspl_add(cfg, dict);
+        break;
+    default:
+        break;
     }
     return ret;
 }

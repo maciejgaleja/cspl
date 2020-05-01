@@ -37,9 +37,18 @@ struct FilterSpecification
 class RunConfig
 {
 public:
+    enum class OpMode
+    {
+        CHECK,
+        CREATE,
+        ADD
+    };
+
+	OpMode mode;
     std::string language = "en_US";
     std::string file = "";
     bool interactive = false;
+    std::vector<std::string> words_to_add;
 
 	std::vector<FilterSpecification> filter;
 

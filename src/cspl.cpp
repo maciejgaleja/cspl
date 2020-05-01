@@ -36,6 +36,8 @@
 
 #include "dictionary/dictionary.hpp"
 
+#include "log.hpp"
+
 #include <hunspell.hxx>
 
 using std::make_shared;
@@ -59,6 +61,13 @@ int cspl(RunConfig& cfg)
 
     shared_ptr<WordConverter> conv = make_shared<WordConverter>();
 
+    shared_ptr<FileSink> sink;
+    if(cfg.interactive && (cfg.file.size() > 0))
+    {
+        sink = make_shared<FileSink>(cfg.file);
+        conv->add_char_sink(sink);
+    }
+
     vector<shared_ptr<CharFilter>> filters;
     if(cfg.filter.size() == 0)
     {
@@ -66,14 +75,28 @@ int cspl(RunConfig& cfg)
     }
     else
     {
+        shared_ptr<CharFilter> src;
         for(auto it = cfg.filter.begin(); it != cfg.filter.end(); ++it)
         {
             auto spec = *it;
             auto filter =
                 make_shared<CharFilter>(spec.begin, spec.end, spec.inverted);
             filters.push_back(filter);
-            source->add_sink(filter);
+            if(src)
+            {
+                src->add_unmatch_sink(filter);
+            }
+            else
+            {
+                source->add_sink(filter);
+            }
             filter->add_match_sink(conv);
+            src = filter;
+        }
+        if(sink)
+        {
+            log << "Last filter will write to sink\n";
+            filters.back()->add_unmatch_sink(sink);
         }
     }
 
@@ -86,15 +109,11 @@ int cspl(RunConfig& cfg)
     {
         checker = make_shared<HunspellChecker>(dict);
     }
-    conv->add_word_sink(checker);
-
-    shared_ptr<FileSink> sink;
-    if(cfg.interactive && (cfg.file.size() > 0))
+    if(sink)
     {
-        sink = make_shared<FileSink>(cfg.file);
         checker->add_sink(sink);
-        conv->add_char_sink(sink);
     }
+    conv->add_word_sink(checker);
 
     while(source->next())
     {

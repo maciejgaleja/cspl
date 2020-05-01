@@ -44,7 +44,6 @@ CharFilter::CharFilter(const std::string& start,
         m_on_match   = [this](char c) { notify_match(c); };
         m_on_unmatch = [this](char c) { notify_unmatch(c); };
     }
-    log << "Filtering: " << start << " ... " << end << "\n";
 }
 
 

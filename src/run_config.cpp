@@ -73,8 +73,6 @@ bool RunConfig::add_filter(const std::vector<std::string>& filters)
             ret = false;
             break;
         }
-        log << "Filtering words " << (spec.inverted ? "not " : "")
-            << "between " << spec.begin << " and " << spec.end << "\n";
         filter.push_back(spec);
     }
     return ret;

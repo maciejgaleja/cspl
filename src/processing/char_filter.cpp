@@ -23,8 +23,8 @@
 
 #include "char_filter.hpp"
 
-#include <iomanip>
 #include "..//log.hpp"
+#include <iomanip>
 #include <iostream>
 
 using std::cout;

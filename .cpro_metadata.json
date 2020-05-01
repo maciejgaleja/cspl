@@ -71,6 +71,14 @@
         "additional_authors": [],
         "brief": ""
     },
+    "src/processing/filter_buffer.cpp": {
+        "additional_authors": [],
+        "brief": ""
+    },
+    "src/processing/filter_buffer.hpp": {
+        "additional_authors": [],
+        "brief": ""
+    },
     "src/processing/hunspell_checker.cpp": {
         "additional_authors": [],
         "brief": ""
@@ -84,6 +92,18 @@
         "brief": ""
     },
     "src/processing/hunspell_fixer.hpp": {
+        "additional_authors": [],
+        "brief": ""
+    },
+    "src/processing/item_iterator.hpp": {
+        "additional_authors": [],
+        "brief": ""
+    },
+    "src/processing/item_sink.hpp": {
+        "additional_authors": [],
+        "brief": ""
+    },
+    "src/processing/item_source.hpp": {
         "additional_authors": [],
         "brief": ""
     },

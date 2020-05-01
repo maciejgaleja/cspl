@@ -35,7 +35,9 @@
 class CharFilter : public ItemSink<Char>
 {
 public:
-    CharFilter(const std::string& start, const std::string& end, bool inverted = false);
+    CharFilter(const std::string& start,
+               const std::string& end,
+               bool inverted = false);
     ~CharFilter() {}
     void add(const Char& c);
 
@@ -58,7 +60,7 @@ private:
     std::function<void(Char)> m_on_match;
     std::function<void(Char)> m_on_unmatch;
 
-	bool m_invert = false;
+    bool m_invert = false;
     bool m_active = false;
     int m_delay;
 

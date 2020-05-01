@@ -45,10 +45,10 @@ void HunspellFixer::add(const Word& word)
             m_dict.add(word);
             notify_all(word);
         }
-		else if (choice.choice == UserDecision::Choice::CUSTOM)
-		{
+        else if(choice.choice == UserDecision::Choice::CUSTOM)
+        {
             add(choice.custom_word);
-		}
+        }
         else
         {
             notify_all(alternatives[choice.chosen_word]);

@@ -44,16 +44,16 @@ public:
         ADD
     };
 
-	OpMode mode;
+    OpMode mode;
     std::string language = "en_US";
-    std::string file = "";
-    bool interactive = false;
+    std::string file     = "";
+    bool interactive     = false;
     std::vector<std::string> words_to_add;
 
-	std::vector<FilterSpecification> filter;
+    std::vector<FilterSpecification> filter;
 
     bool validate();
-    bool add_filter(const std::vector<std::string> &filters);
+    bool add_filter(const std::vector<std::string>& filters);
 };
 
 #endif // SRC__RUN_CONFIG_HPP

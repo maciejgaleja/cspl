@@ -35,7 +35,10 @@ void WordConverter::add(const Char& c)
         {
             notify_all_words(word);
         }
-        notify_all_chars(c);
+        if(c != ASCII_ACK)
+        {
+            notify_all_chars(c);
+        }
     }
     else
     {

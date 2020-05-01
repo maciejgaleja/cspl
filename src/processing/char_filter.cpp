@@ -72,5 +72,6 @@ void CharFilter::add(const Char& c)
     if(match_end.first)
     {
         m_active = false;
+        m_on_match(ASCII_ACK);
     }
 }

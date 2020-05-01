@@ -37,6 +37,7 @@ struct FilterSpecification
 class RunConfig
 {
 public:
+    std::string language = "en_US";
     std::string file = "";
     bool interactive = false;
 

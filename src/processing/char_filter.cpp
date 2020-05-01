@@ -23,8 +23,42 @@
 
 #include "char_filter.hpp"
 
+#include <iomanip>
 #include <iostream>
-void CharFilter::add(Char c)
+
+using std::cout;
+
+CharFilter::CharFilter(const std::string& start, const std::string& end)
+    : m_buf_begin(start), m_buf_end(end)
+{}
+
+
+void CharFilter::add(const Char& c)
 {
-    notify_match(c);
+    m_delay          = --m_delay < -1 ? -1 : m_delay;
+    auto match_begin = m_buf_begin.add(c);
+    auto match_end   = m_buf_end.add(c);
+    if(match_begin.first)
+    {
+        m_active = true;
+        m_delay  = m_buf_end.size();
+    }
+    Char c_fwd = match_end.second;
+    if(c_fwd != '\0')
+    {
+        cout << m_active << " " << std::setw(2) << m_delay;
+        if(m_active && (m_delay < 0))
+        {
+            cout << " -----> " << c_fwd << "\n";
+        }
+        else
+        {
+            cout << " ----->     " << c_fwd << "\n";
+        }
+        notify_match(c);
+    }
+    if(match_end.first)
+    {
+        m_active = false;
+    }
 }

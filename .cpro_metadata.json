@@ -3,6 +3,10 @@
         "additional_authors": [],
         "brief": ""
     },
+    "src/cspl.hpp": {
+        "additional_authors": [],
+        "brief": ""
+    },
     "src/dictionary/custom_dictionary.cpp": {
         "additional_authors": [],
         "brief": ""
@@ -23,11 +27,19 @@
         "additional_authors": [],
         "brief": ""
     },
+    "src/main.cpp": {
+        "additional_authors": [],
+        "brief": ""
+    },
     "src/processing/char_filter.cpp": {
         "additional_authors": [],
         "brief": ""
     },
     "src/processing/char_filter.hpp": {
+        "additional_authors": [],
+        "brief": ""
+    },
+    "src/processing/char_iterator.hpp": {
         "additional_authors": [],
         "brief": ""
     },
@@ -44,6 +56,10 @@
         "brief": ""
     },
     "src/processing/common.hpp": {
+        "additional_authors": [],
+        "brief": ""
+    },
+    "src/processing/file_sink.hpp": {
         "additional_authors": [],
         "brief": ""
     },
@@ -100,6 +116,14 @@
         "brief": ""
     },
     "src/processing/word_source.hpp": {
+        "additional_authors": [],
+        "brief": ""
+    },
+    "src/run_config.cpp": {
+        "additional_authors": [],
+        "brief": ""
+    },
+    "src/run_config.hpp": {
         "additional_authors": [],
         "brief": ""
     }

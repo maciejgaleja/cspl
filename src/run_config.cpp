@@ -27,10 +27,10 @@ bool RunConfig::validate()
 {
     bool ret = true;
 
-	if (interactive && (file.size() == 0))
-	{
-		ret = false;
-	}
+    if(interactive && (file.size() == 0))
+    {
+        ret = false;
+    }
 
-	return ret;
+    return ret;
 }

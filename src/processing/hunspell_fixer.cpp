@@ -38,21 +38,21 @@ void HunspellFixer::add(const Word& word)
         auto choice       = ask_user(word, alternatives);
         if(choice.choice == UserDecision::Choice::IGNORE)
         {
-            notify_all_words(word);
+            notify_all(word);
         }
         else if(choice.choice == UserDecision::Choice::ADD)
         {
             m_dict.add(word);
-            notify_all_words(word);
+            notify_all(word);
         }
         else
         {
-            notify_all_words(alternatives[choice.chosen_word]);
+            notify_all(alternatives[choice.chosen_word]);
         }
     }
     else
     {
-        notify_all_words(word);
+        notify_all(word);
     }
 }
 

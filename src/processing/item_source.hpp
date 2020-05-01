@@ -21,17 +21,36 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 **/
 
-#ifndef SRC__PROCESSING__CHAR_SINK_HPP
-#define SRC__PROCESSING__CHAR_SINK_HPP
+#ifndef SRC__PROCESSING__ITEM_SOURCE_HPP
+#define SRC__PROCESSING__ITEM_SOURCE_HPP
 
 #include "common.hpp"
+#include "item_sink.hpp"
+#include <memory>
+#include <vector>
 
-class CharSink
+template <typename T>
+class ItemSource
 {
+private:
+    std::vector<std::shared_ptr<ItemSink<T>>> m_sinks;
 
 public:
-    virtual ~CharSink() {}
-    virtual void add(Char c) = 0;
+    virtual ~ItemSource() {}
+    void add_sink(std::shared_ptr<ItemSink<T>> sink)
+    {
+        m_sinks.push_back(sink);
+    }
+
+protected:
+    void notify_all(T item)
+    {
+        for(auto& sink : m_sinks)
+        {
+            sink->add(item);
+        }
+    }
 };
 
-#endif // SRC__PROCESSING__CHAR_SINK_HPP
+
+#endif // SRC__PROCESSING__ITEM_SOURCE_HPP

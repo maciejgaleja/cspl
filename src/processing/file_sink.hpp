@@ -21,24 +21,23 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 **/
 
-#ifndef SRC__PROCESSING__STDIO_SINK_HPP
-#define SRC__PROCESSING__STDIO_SINK_HPP
+#ifndef SRC__PROCESSING__FILE_SINK_HPP
+#define SRC__PROCESSING__FILE_SINK_HPP
 
-#include "char_sink.hpp"
-#include "word_sink.hpp"
+
+#include "item_sink.hpp"
 
 #include <sstream>
 
+#include <fstream>
 #include <iostream>
 
-class FileSink : public CharSink, public WordSink
+class FileSink : public ItemSink<Char>, public ItemSink<Word>
 {
 public:
-	FileSink(const std::string& filename): m_file(filename){
+    FileSink(const std::string& filename) : m_file(filename) {}
 
-	}
-
-    void add(Char c)
+    void add(const Char& c)
     {
         if(c != '\0')
         {
@@ -65,4 +64,5 @@ private:
     std::string m_file;
 };
 
-#endif // SRC__PROCESSING__STDIO_SINK_HPP
+
+#endif // SRC__PROCESSING__FILE_SINK_HPP

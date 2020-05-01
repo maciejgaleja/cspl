@@ -24,16 +24,18 @@
 #ifndef SRC__PROCESSING__HUNSPELL_CHECKER_HPP
 #define SRC__PROCESSING__HUNSPELL_CHECKER_HPP
 
-#include "word_sink.hpp"
-#include "word_source.hpp"
+#include "item_sink.hpp"
+#include "item_source.hpp"
 
 #include "../dictionary/dictionary.hpp"
 
-class HunspellChecker : public WordSink, public WordSource
+class HunspellChecker : public ItemSink<Word>, public ItemSource<Word>
 {
 public:
     HunspellChecker(Dictionary& dict) : m_dict(dict){};
+
     void add(const Word& word);
+
     std::vector<Word>& errors()
     {
         return m_errors;

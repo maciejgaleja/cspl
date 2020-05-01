@@ -21,17 +21,17 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 **/
 
-#include "word_source.hpp"
+#ifndef SRC__PROCESSING__ITEM_ITERATOR_HPP
+#define SRC__PROCESSING__ITEM_ITERATOR_HPP
 
-void WordSource::add_word_sink(std::shared_ptr<WordSink> sink)
-{
-    m_word_sinks.push_back(sink);
-}
+#include "item_source.hpp"
 
-void WordSource::notify_all_words(const Word& word)
+template <typename T>
+class ItemIterator : public ItemSource<T>
 {
-    for(auto& sink : m_word_sinks)
-    {
-        sink->add(word);
-    }
-}
+public:
+    virtual ~ItemIterator(){};
+    virtual bool next() = 0;
+};
+
+#endif // SRC__PROCESSING__ITEM_ITERATOR_HPP

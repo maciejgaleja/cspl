@@ -21,16 +21,16 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 **/
 
-#ifndef SRC__PROCESSING__WORD_SINK_HPP
-#define SRC__PROCESSING__WORD_SINK_HPP
+#ifndef SRC__PROCESSING__ITEM_SINK_HPP
+#define SRC__PROCESSING__ITEM_SINK_HPP
 
-#include "common.hpp"
-
-class WordSink
+template <typename T>
+class ItemSink
 {
 public:
-    virtual ~WordSink() {}
-    virtual void add(const Word& word) = 0;
+    virtual ~ItemSink() {}
+    virtual void add(const T& item) = 0;
 };
 
-#endif // SRC__PROCESSING__WORD_SINK_HPP
+
+#endif // SRC__PROCESSING__ITEM_SINK_HPP

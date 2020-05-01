@@ -24,10 +24,9 @@
 #ifndef SRC__PROCESSING__STDIO_SOURCE_HPP
 #define SRC__PROCESSING__STDIO_SOURCE_HPP
 
-#include "char_source.hpp"
-#include "char_iterator.hpp"
+#include "item_iterator.hpp"
 
-class StdioSource : public CharSource, public CharIterator
+class StdioSource : public ItemIterator<Char>
 {
 public:
     bool next();

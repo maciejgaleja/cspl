@@ -24,17 +24,17 @@
 #ifndef SRC__PROCESSING__WORD_CONVERTER_HPP
 #define SRC__PROCESSING__WORD_CONVERTER_HPP
 
-#include "char_sink.hpp"
-#include "word_sink.hpp"
-#include "word_source.hpp"
+#include "common.hpp"
+#include "item_sink.hpp"
+#include "item_source.hpp"
 
 #include <sstream>
 
-class WordConverter : public CharSink, public WordSource
+class WordConverter : public ItemSink<Char>, public ItemSource<Word>
 {
 private:
-    std::vector<std::shared_ptr<WordSink>> m_word_sinks;
-    std::vector<std::shared_ptr<CharSink>> m_char_sinks;
+    std::vector<std::shared_ptr<ItemSink<Word>>> m_word_sinks;
+    std::vector<std::shared_ptr<ItemSink<Char>>> m_char_sinks;
     std::stringstream m_buffer;
 
     void notify_all_words(Word word);
@@ -43,10 +43,10 @@ private:
     bool is_separator(Char c);
 
 public:
-    void add(Char c);
+    void add(const Char& c);
 
-    void add_word_sink(std::shared_ptr<WordSink> sink);
-    void add_char_sink(std::shared_ptr<CharSink> sink);
+    void add_word_sink(std::shared_ptr<ItemSink<Word>> sink);
+    void add_char_sink(std::shared_ptr<ItemSink<Char>> sink);
 };
 
 #endif // SRC__PROCESSING__WORD_CONVERTER_HPP

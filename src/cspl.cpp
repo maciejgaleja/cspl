@@ -26,10 +26,11 @@
 #include "cspl.hpp"
 
 #include "processing/char_filter.hpp"
+#include "processing/file_sink.hpp"
 #include "processing/file_source.hpp"
 #include "processing/hunspell_checker.hpp"
 #include "processing/hunspell_fixer.hpp"
-#include "processing/file_sink.hpp"
+#include "processing/item_iterator.hpp"
 #include "processing/stdio_source.hpp"
 #include "processing/word_converter.hpp"
 
@@ -45,7 +46,7 @@ int cspl(RunConfig& cfg)
     Hunspell hs("C:\\Hunspell\\en_US.aff", "C:\\Hunspell\\en_US.dic");
     Dictionary dict(hs, "en_US", ".");
 
-    shared_ptr<CharSource> source;
+    shared_ptr<ItemIterator<Char>> source;
     if(cfg.file.size() > 0)
     {
         source = make_shared<FileSource>(cfg.file);
@@ -55,7 +56,8 @@ int cspl(RunConfig& cfg)
         source = make_shared<StdioSource>();
     }
 
-    shared_ptr<CharFilter> filter = make_shared<CharFilter>();
+    //shared_ptr<CharFilter> filter = make_shared<CharFilter>("/*", "*/");
+    shared_ptr<CharFilter> filter = make_shared<CharFilter>("#", "\n");
     source->add_sink(filter);
 
     shared_ptr<WordConverter> conv = make_shared<WordConverter>();
@@ -74,11 +76,11 @@ int cspl(RunConfig& cfg)
     conv->add_word_sink(checker);
 
     shared_ptr<FileSink> sink;
-	if(cfg.interactive && (cfg.file.size() > 0))
+    if(cfg.interactive && (cfg.file.size() > 0))
     {
         sink = make_shared<FileSink>(cfg.file);
-    checker->add_word_sink(sink);
-    conv->add_char_sink(sink);
+        checker->add_sink(sink);
+        conv->add_char_sink(sink);
     }
 
     while(source->next())
@@ -86,7 +88,7 @@ int cspl(RunConfig& cfg)
     }
     source.reset();
 
-	if(sink)
+    if(sink)
     {
         sink->flush();
     }
